@@ -69,3 +69,5 @@ C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeWebApp\obj\Debug\GeneticC
 C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeWebApp\obj\Debug\GeneticCodeWebApp.pdb
 C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeWebApp\bin\GeneticCodeLibrary.dll
 C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeWebApp\bin\GeneticCodeLibrary.pdb
+C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeWebApp\bin\HardyWeinberg.dll
+C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeWebApp\bin\HardyWeinberg.pdb

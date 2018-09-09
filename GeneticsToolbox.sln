@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticCodeLibraryTests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticCodeWebApp", "GeneticCodeWebApp\GeneticCodeWebApp.csproj", "{CBB713C3-16F9-4322-8E4E-11B948666028}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardyWeinberg", "HardyWeinberg\HardyWeinberg.csproj", "{0BA78206-1689-4D0F-985C-B99BA8E3BE13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{CBB713C3-16F9-4322-8E4E-11B948666028}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBB713C3-16F9-4322-8E4E-11B948666028}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBB713C3-16F9-4322-8E4E-11B948666028}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA78206-1689-4D0F-985C-B99BA8E3BE13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BA78206-1689-4D0F-985C-B99BA8E3BE13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA78206-1689-4D0F-985C-B99BA8E3BE13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BA78206-1689-4D0F-985C-B99BA8E3BE13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
