@@ -1,5 +1,7 @@
 ﻿@using System.EnterpriseServices
 @using GeneticCodeLibrary;
+@using HardyWeinberg;
+@using System.Xml;
 
 <!DOCTYPE html>
 
@@ -10,300 +12,377 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Genetic Code Tools</title>
-    <link rel="icon" type="png" href="DNA.png"/>
-    <link href="content/bootstrap.css" rel="stylesheet" type="text/css"/>
-    <link href="content/custom.css" rel="stylesheet" type="text/css"/>
+    <link rel="icon" type="png" href="DNA.png" />
+    <link href="content/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="content/custom.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#geneticcode">Genetic Code Toolbox</a>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#geneticcode">Genetic Code Toolbox</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#geneticcode">Genetic Code</a></li>
+                    <li><a href="#hardy-weinberg">Hardy-Weinberg</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#geneticcode">Genetic Code</a></li>
-            </ul>
+    </nav>
+
+    <div class="row" style="margin-top: 70px;">
+        <div class="col-md-3"></div>
+        <div class="col-md-6" style="margin-left: -10px; margin-right: -10px;">
+            <h1 style="text-align: center; margin-bottom: 20px;">Genetics Toolbox</h1>
+            <p style="text-align: center;">
+                The motivation behind this project is to provide tools that can quickly perform tasks or calculations relating to genetics.
+                At the moment, the Genetic Code and Hardy-Weinberg tools have been implemented.
+            </p>
         </div>
+        <div class="col-md-3"></div>
     </div>
-</nav>
 
-<div class="row" style="margin-top: 70px;">
-    <div class="col-md-3"></div>
-    <div class="col-md-6" style="margin-left: -10px; margin-right: -10px;">
-        <h1 style="text-align: center;">Genetics Toolbox</h1>
-        <p style="text-align: center;">The idea behind this project is to create several web apps that can quickly perform tasks/calculations relating to genetics. 
-            So far, only the genetic code tool has been completed, which provides the following functions:
-            <ul>
-                <li>Finding DNA template/coding strand's complementary strand</li>
-                <li>Transcribing DNA template/coding strands</li>
-                <li>Getting the open reading frame (ORF) of DNA coding strands</li>
-                <li>Translating DNA template/coding strands into amino acid sequences</li>
-            </ul>
-        </p>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <article id="geneticcode">
+                @{
+                    bool template = false;
+                    bool coding = false;
+
+                    if (IsPost)
+                    {
+                        if (Request.Form["template"] != null)
+                        {
+                            template = true;
+                        }
+                        else if (Request.Form["coding"] != null)
+                        {
+                            coding = true;
+                        }
+                    }
+                }
+                <h2 style="text-align: center; margin-bottom: 20px;">Genetic Code Tool</h2>
+                <p style="text-align: center;">
+                    This tool provides the following functions:
+                    <ul style="text-align: center; list-style: inside;">
+                        <li>Finding DNA template/coding strand's complementary strand</li>
+                        <li>Transcribing DNA template/coding strands</li>
+                        <li>Getting the open reading frame (ORF) of DNA coding strands</li>
+                        <li>Translating DNA template/coding strands into amino acid sequences</li>
+                    </ul>
+                </p>
+                <p style="text-align: center; font-size: 15px;"><strong>Select the type of strand you'd like to work with:</strong></p>
+
+                <form style="text-align: center; margin-bottom: 20px;" action="" method="post">
+                    <input type="submit" class="btn btn-default" value="Template Strand (3'-5')" name="template" />
+                    <input type="submit" class="btn btn-default" value="Coding Strand (5'-3')" name="coding" />
+                </form>
+
+                <form style="text-align: center; margin-bottom: 20px;" action="" method="post">
+                    @{
+                        if (template)
+                        {
+                            <br />
+                            <p>
+                                <label>Enter Template Strand:</label>
+                                <input type="text" name="template-sequence">
+                                <br />
+                                <input type="submit" value="Find Complementary" name="template-complementary" />
+                                <input type="submit" value="Transcribe" name="template-transcribe" />
+                                <input type="submit" value="Translate" name="template-translate" />
+                            </p>
+                            <br />
+
+                        }
+                        else if (coding)
+                        {
+                            <br />
+                            <p>
+                                <label>Enter Coding Strand:</label>
+                                <input type="text" name="coding-sequence">
+                                <br />
+                                <input type="submit" value="Find ORF" name="coding-ORF" />
+                                <input type="submit" value="Find Complementary" name="coding-complementary" />
+                                <input type="submit" value="Transcribe" name="coding-transcribe" />
+                                <input type="submit" value="Translate" name="coding-translate" />
+                            </p>
+                            <br />
+                        }
+
+                        if (IsPost)
+                        {
+                            if (Request.Form["template-complementary"] != null)
+                            {
+                                string sequence = Request["template-sequence"];
+                                try
+                                {
+                                    TemplateStrand ts = new TemplateStrand(sequence);
+                                    string comp = ts.Complementary();
+                                    <br />
+                                    <strong><p>@comp</p></strong>
+                                }
+                                catch (Exception ex)
+                                {
+                                    string output = ex.Message;
+                                    <br />
+                                    <strong><p>@output</p></strong>
+                                }
+
+                            }
+                            else if (Request.Form["template-transcribe"] != null)
+                            {
+                                string sequence = Request["template-sequence"];
+                                try
+                                {
+                                    TemplateStrand ts = new TemplateStrand(sequence);
+                                    string transcript = ts.Transcribe();
+                                    <br />
+                                    <strong><p>@transcript</p></strong>
+                                }
+                                catch (Exception ex)
+                                {
+                                    string output = ex.Message;
+                                    <br />
+                                    <strong><p>@output</p></strong>
+                                }
+                            }
+                            else if (Request.Form["template-translate"] != null)
+                            {
+                                string sequence = Request["template-sequence"];
+                                try
+                                {
+                                    TemplateStrand ts = new TemplateStrand(sequence);
+                                    string comp = ts.Complementary();
+                                    comp = (comp.Split('-'))[1];
+                                    CodingStrand cs = new CodingStrand(comp);
+                                    try
+                                    {
+                                        string orf = cs.GetOpenReadingFrame();
+                                        orf = (orf.Split('|'))[1];
+                                        CodingStrand pretranscript = new CodingStrand(orf);
+                                        string transcript = pretranscript.Transcribe();
+                                        RnaStrand rs = new RnaStrand(transcript);
+                                        try
+                                        {
+                                            string polypeptide = rs.Translate();
+                                            <br />
+                                            <strong><p>@polypeptide</p></strong>
+                                        }
+                                        catch (Exception ex) // translate exception
+                                        {
+                                            string output = ex.Message;
+                                            <br />
+                                            <strong><p>@output</p></strong>
+                                        }
+                                    }
+                                    catch (Exception ex) // ORF exception
+                                    {
+                                        string msg = ex.Message;
+                                        <br />
+                                        <strong><p>@msg</p></strong>
+                                    }
+                                }
+                                catch (Exception ex) // template strand exception
+                                {
+                                    string output = ex.Message;
+                                    <br />
+                                    <strong><p>@output</p></strong>
+                                }
+                            }
+                            else if (Request.Form["coding-orf"] != null)
+                            {
+                                string sequence = Request["coding-sequence"];
+                                try
+                                {
+                                    CodingStrand cs = new CodingStrand(sequence);
+                                    string orf = cs.GetOpenReadingFrame();
+                                    <br />
+                                    <strong><p>@orf</p></strong>
+                                }
+                                catch (Exception ex)
+                                {
+                                    string output = ex.Message;
+                                    <br />
+                                    <strong><p>@output</p></strong>
+                                }
+                            }
+                            else if (Request.Form["coding-complementary"] != null)
+                            {
+                                string sequence = Request["coding-sequence"];
+                                try
+                                {
+                                    CodingStrand cs = new CodingStrand(sequence);
+                                    string comp = cs.Complementary();
+                                    <br />
+                                    <strong><p>@comp</p></strong>
+                                }
+                                catch (Exception ex)
+                                {
+                                    string output = ex.Message;
+                                    <br />
+                                    <strong><p>@output</p></strong>
+                                }
+                            }
+                            else if (Request.Form["coding-transcribe"] != null)
+                            {
+                                string sequence = Request["coding-sequence"];
+                                try
+                                {
+                                    CodingStrand cs = new CodingStrand(sequence);
+                                    string transcript = cs.Transcribe();
+                                    <br />
+                                    <strong><p>@transcript</p></strong>
+                                }
+                                catch (Exception ex)
+                                {
+                                    string output = ex.Message;
+                                    <br />
+                                    <strong><p>@output</p></strong>
+                                }
+                            }
+                            else if (Request.Form["coding-translate"] != null)
+                            {
+                                string sequence = Request["coding-sequence"];
+                                try
+                                {
+                                    CodingStrand cs = new CodingStrand(sequence);
+                                    try
+                                    {
+                                        string orf = cs.GetOpenReadingFrame();
+                                        orf = (orf.Split('|'))[1];
+                                        CodingStrand pretranscript = new CodingStrand(orf);
+                                        string transcript = pretranscript.Transcribe();
+                                        RnaStrand rs = new RnaStrand(transcript);
+                                        try
+                                        {
+                                            string polypeptide = rs.Translate();
+                                            <br />
+                                            <strong><p>@polypeptide</p></strong>
+                                        }
+                                        catch (Exception ex) // translate exception
+                                        {
+                                            string output = ex.Message;
+                                            <br />
+                                            <strong><p>@output</p></strong>
+                                        }
+                                    }
+                                    catch (Exception ex) // ORF exception
+                                    {
+                                        string msg = ex.Message;
+                                        <br />
+                                        <strong><p>@msg</p></strong>
+                                    }
+                                }
+                                catch (Exception ex) // template strand exception
+                                {
+                                    string output = ex.Message;
+                                    <br />
+                                    <strong><p>@output</p></strong>
+                                }
+                            }
+                        }
+                    }
+                </form>
+            </article>
+        </div>
+        <div class="col-md-3"></div>
     </div>
-    <div class="col-md-3"></div>
-</div>
 
-<div class="row">
-<div class="col-md-3"></div>
-<div class="col-md-6">
-<article id="geneticcode">
-@{
-    bool template = false;
-    bool coding = false;
+    <hr />
 
-    if (IsPost)
-    {
-        if (Request.Form["template"] != null)
-        {
-            template = true;
-        }
-        else if (Request.Form["coding"] != null)
-        {
-            coding = true;
-        }
-    }
-}
-<h3 style="text-align: center;">Genetic Code Tool</h3>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <article id="hardy-weinberg">
+            <div class="col-md-6">
+                <h2 style="text-align: center; margin-bottom: 20px;">Hardy-Weinberg Tool</h2>
+                <p style="text-align: center;">The Hardy-Weinberg law is used to predict properties of a gene pool based on allele and genotype frequencies (under a set of ideal conditions - the Hardy-Weinberg equilibrium). This tool takes any one of these frequencies as input and will return a set of information about the genetic makeup of the specified population.</p>
+                <form style="text-align: center; margin-bottom: 20px;" action="" method="post">
+                    <label>Enter Frequency (Between 0-1):</label>
+                    <input type="text" name="variableValue">
+                    <br />
+                    <br />
+                    <p style="text-align: center; font-size: 15px;"><strong>Select the type of value you entered:</strong></p>
+                    <input type="submit" class="btn btn-default" value="Heterozygote Frequency (Aa)" name="heterozygoteFreq" />
+                    <input type="submit" class="btn btn-default" value="Recessive Homozygote Frequency (aa)" name="rHomozygoteFreq" />
+                    <input type="submit" class="btn btn-default" value="Dominant Homozygote Frequency (AA)" name="dHomozygoteFreq" />
+                    <input type="submit" class="btn btn-default" value="Recessive Allele Frequency (a)" name="rAlleleFreq" />
+                    <input type="submit" class="btn btn-default" value="Dominant Allele Frequency (A)" name="dAlleleFreq" />
+                </form>
 
-<form style="text-align: center;" action="" method="post">
-    <input type="submit" class="btn btn-default" value="Template Strand (3'-5')" name="template" />
-    <input type="submit" class="btn btn-default" value="Coding Strand (5'-3')" name="coding" />
-</form>
-            
-<form style="text-align: center;" action="" method="post">
-@{
-    if (template)
-    {
-        <br />
-        <p>
-            <label>Enter Template Strand:</label>
-            <input type="text" name="template-sequence">
-            <br />
-            <input type="submit" value="Find Complementary" name="template-complementary" />
-            <input type="submit" value="Transcribe" name="template-transcribe" />
-            <input type="submit" value="Translate" name="template-translate" />
-        </p>
-        <br />
-
-    }
-    else if (coding)
-    {
-        <br />
-        <p>
-            <label>Enter Coding Strand:</label>
-            <input type="text" name="coding-sequence">
-            <br />
-            <input type="submit" value="Find ORF" name="coding-ORF" />
-            <input type="submit" value="Find Complementary" name="coding-complementary" />
-            <input type="submit" value="Transcribe" name="coding-transcribe" />
-            <input type="submit" value="Translate" name="coding-translate" />
-        </p>
-        <br />
-    }
-
-    if (IsPost)
-    {
-        if (Request.Form["template-complementary"] != null)
-        {
-            string sequence = Request["template-sequence"];
-            try
-            {
-                TemplateStrand ts = new TemplateStrand(sequence);
-                string comp = ts.Complementary();
-                <br/>
-                <strong><p>@comp</p></strong>
-            }
-            catch (Exception ex)
-            {
-                string output = ex.Message;
-                <br/>
-                <strong><p>@output</p></strong>
-            }
-
-        }
-        else if (Request.Form["template-transcribe"] != null)
-        {
-            string sequence = Request["template-sequence"];
-            try
-            {
-                TemplateStrand ts = new TemplateStrand(sequence);
-                string transcript = ts.Transcribe();
-                <br/>
-                <strong><p>@transcript</p></strong>
-            }
-            catch (Exception ex)
-            {
-                string output = ex.Message;
-                <br/>
-                <strong><p>@output</p></strong>
-            }
-        }
-        else if (Request.Form["template-translate"] != null)
-        {
-            string sequence = Request["template-sequence"];
-            try
-            {
-                TemplateStrand ts = new TemplateStrand(sequence);
-                string comp = ts.Complementary();
-                comp = (comp.Split('-'))[1];
-                CodingStrand cs = new CodingStrand(comp);
-                try
-                {
-                    string orf = cs.GetOpenReadingFrame();
-                    orf = (orf.Split('|'))[1];
-                    CodingStrand pretranscript = new CodingStrand(orf);
-                    string transcript = pretranscript.Transcribe();
-                    RnaStrand rs = new RnaStrand(transcript);
-                    try
+                @{
+                    if (IsPost && !(String.IsNullOrEmpty(Request["variableValue"]) || String.IsNullOrWhiteSpace(Request["variableValue"])))
                     {
-                        string polypeptide = rs.Translate();
-                        <br />
-                        <strong><p>@polypeptide</p></strong>
-                    }
-                    catch (Exception ex) // translate exception
-                    {
-                        string output = ex.Message;
-                        <br/>
-                        <strong><p>@output</p></strong>
+                        string variableValue = Request["variableValue"];
+                        var hardyWeinbergProvider = new HardyWeinbergProvider();
+                        XmlNodeList pods;
+
+                        if (Request.Form["heterozygoteFreq"] != null)
+                        {
+                            pods = hardyWeinbergProvider.GetHardyWeinbergResults((int)Formulas.FormulaCodes.HardyWeinbergFormulaGivenHeterozygoteFrequency, variableValue);
+                        }
+                        else if (Request.Form["rHomozygoteFreq"] != null)
+                        {
+                            pods = hardyWeinbergProvider.GetHardyWeinbergResults((int)Formulas.FormulaCodes.HardyWeinbergFormulaGivenRecessiveHomozygoteFrequency, variableValue);
+                        }
+                        else if (Request.Form["dHomozygoteFreq"] != null)
+                        {
+                            pods = hardyWeinbergProvider.GetHardyWeinbergResults((int)Formulas.FormulaCodes.HardyWeinbergFormulaGivenDominantHomozygoteFrequency, variableValue);
+                        }
+                        else if (Request.Form["rAlleleFreq"] != null)
+                        {
+                            pods = hardyWeinbergProvider.GetHardyWeinbergResults((int)Formulas.FormulaCodes.HardyWeinbergFormulaGivenRecessiveAlleleFrequency, variableValue);
+                        }
+                        else
+                        {
+                            pods = hardyWeinbergProvider.GetHardyWeinbergResults((int)Formulas.FormulaCodes.HardyWeinbergFormulaGivenDominantAlleleFrequency, variableValue);
+                        }
+
+                        <hr style="border-top: 2px dotted; border-color: #C3C3C3;" />
+
+                        foreach (XmlNode pod in pods)
+                        {
+                            <p style="text-align: center; font-size: 15px;"><strong>@pod.Attributes["title"].Value</strong></p>
+                            <img src="@pod["subpod"]["img"].Attributes["src"].Value" style="display: block; margin-left: auto; margin-right: auto;" />
+                            <br />
+                        }
                     }
                 }
-                catch (Exception ex) // ORF exception
-                {
-                    string msg = ex.Message;
-                    <br/>
-                    <strong><p>@msg</p></strong>
-                }
-            }
-            catch (Exception ex) // template strand exception
-            {
-                string output = ex.Message;
-                <br/>
-                <strong><p>@output</p></strong>
-            }
-        }
-        else if (Request.Form["coding-orf"] != null)
-        {
-            string sequence = Request["coding-sequence"];
-            try
-            {
-                CodingStrand cs = new CodingStrand(sequence);
-                string orf = cs.GetOpenReadingFrame();
-                <br/>
-                <strong><p>@orf</p></strong>
-            }
-            catch (Exception ex)
-            {
-                string output = ex.Message;
-                <br />
-                <strong><p>@output</p></strong>
-            }
-        }
-        else if (Request.Form["coding-complementary"] != null)
-        {
-            string sequence = Request["coding-sequence"];
-            try
-            {
-                CodingStrand cs = new CodingStrand(sequence);
-                string comp = cs.Complementary();
-                <br />
-                <strong><p>@comp</p></strong>
-            }
-            catch (Exception ex)
-            {
-                string output = ex.Message;
-                <br/>
-                <strong><p>@output</p></strong>
-            }
-        }
-        else if (Request.Form["coding-transcribe"] != null)
-        {
-            string sequence = Request["coding-sequence"];
-            try
-            {
-                CodingStrand cs = new CodingStrand(sequence);
-                string transcript = cs.Transcribe();
-                <br/>
-                <strong><p>@transcript</p></strong>
-            }
-            catch (Exception ex)
-            {
-                string output = ex.Message;
-                <br/>
-                <strong><p>@output</p></strong>
-            }
-        }
-        else if (Request.Form["coding-translate"] != null)
-        {
-            string sequence = Request["coding-sequence"];
-            try
-            {
-                CodingStrand cs = new CodingStrand(sequence);
-                try
-                {
-                    string orf = cs.GetOpenReadingFrame();
-                    orf = (orf.Split('|'))[1];
-                    CodingStrand pretranscript = new CodingStrand(orf);
-                    string transcript = pretranscript.Transcribe();
-                    RnaStrand rs = new RnaStrand(transcript);
-                    try
-                    {
-                        string polypeptide = rs.Translate();
-                        <br/>
-                        <strong><p>@polypeptide</p></strong>
-                    }
-                    catch (Exception ex) // translate exception
-                    {
-                        string output = ex.Message;
-                        <br />
-                        <strong><p>@output</p></strong>
-                    }
-                }
-                catch (Exception ex) // ORF exception
-                {
-                    string msg = ex.Message;
-                    <br/>
-                    <strong><p>@msg</p></strong>
-                }
-            }
-            catch (Exception ex) // template strand exception
-            {
-                string output = ex.Message;
-                <br/>
-                <strong><p>@output</p></strong>
-            }
-        }
-    }
-}
-</form>
-</article>
-</div>
-<div class="col-md-3"></div>
-</div>
-
-<div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-        <article id="comingsoon">
-            <h3 style="text-align: center;">Coming Soon</h3>
-            <ul>
-                <li>Hardy-Weinberg Calculator</li>
-                <li>Three-Point-Cross Gene Mapping</li>
-            </ul>
+            </div>
         </article>
+        <div class="col-md-3"></div>
     </div>
-    <div class="col-md-4"></div>
-</div>
 
-<footer>
-    <hr>
-    <p style="text-align: center;">&copy; Sherry Li, 2018</p>
-</footer>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <article id="comingsoon">
+                <h2 style="text-align: center;">Coming Soon</h2>
+                <ul>
+                    <li>Three-Point-Cross Gene Mapping</li>
+                    <li>...Suggestions welcomed!</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+    <footer>
+        <hr>
+        <p style="text-align: center;">&copy; Sherry Li, 2018</p>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </body>
 </html>

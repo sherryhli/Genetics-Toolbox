@@ -123,6 +123,10 @@
       <Project>{d5b5324e-0b2c-4d4d-89ab-7d275fce35b5}</Project>
       <Name>GeneticCodeLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HardyWeinberg\HardyWeinberg.csproj">
+      <Project>{0ba78206-1689-4d0f-985c-b99ba8e3be13}</Project>
+      <Name>HardyWeinberg</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
