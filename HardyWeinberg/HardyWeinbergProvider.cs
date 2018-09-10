@@ -10,7 +10,7 @@ namespace HardyWeinberg
     public class HardyWeinbergProvider
     {
         private readonly string url = "http://www.wolframalpha.com/api/v2/query?";
-        private readonly string appId = "RP3Q3E-UEKAV4KLHE";
+        private readonly string appId = "REPLACE WITH API KEY";
         // Selects the calculator to use, use Wolfram's Fast Query Recognizer API to verify this
         private readonly string input = "Hardy+Weinberg+law";
 
