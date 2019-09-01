@@ -1,6 +1,0 @@
-C:\Users\sherr\source\repos\GeneticsToolbox\HardyWeinberg\bin\Debug\HardyWeinberg.dll
-C:\Users\sherr\source\repos\GeneticsToolbox\HardyWeinberg\bin\Debug\HardyWeinberg.pdb
-C:\Users\sherr\source\repos\GeneticsToolbox\HardyWeinberg\obj\Debug\HardyWeinberg.csprojAssemblyReference.cache
-C:\Users\sherr\source\repos\GeneticsToolbox\HardyWeinberg\obj\Debug\HardyWeinberg.csproj.CoreCompileInputs.cache
-C:\Users\sherr\source\repos\GeneticsToolbox\HardyWeinberg\obj\Debug\HardyWeinberg.dll
-C:\Users\sherr\source\repos\GeneticsToolbox\HardyWeinberg\obj\Debug\HardyWeinberg.pdb

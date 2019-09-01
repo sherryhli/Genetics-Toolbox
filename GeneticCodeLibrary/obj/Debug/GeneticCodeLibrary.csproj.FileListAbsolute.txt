@@ -1,6 +1,0 @@
-C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeLibrary\bin\Debug\GeneticCodeLibrary.dll
-C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeLibrary\bin\Debug\GeneticCodeLibrary.pdb
-C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeLibrary\obj\Debug\GeneticCodeLibrary.csprojAssemblyReference.cache
-C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeLibrary\obj\Debug\GeneticCodeLibrary.csproj.CoreCompileInputs.cache
-C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeLibrary\obj\Debug\GeneticCodeLibrary.dll
-C:\Users\sherr\source\repos\GeneticsToolbox\GeneticCodeLibrary\obj\Debug\GeneticCodeLibrary.pdb
